@@ -71,7 +71,7 @@ setuptools.setup(
     python_requires=">=3.5",
     setup_requires=['setuptools >= 30.3'],
     install_requires=[
-        'mysql-connector-python'
+        'PyMySQL[rsa]'
     ],
     license=about['__license__'],
     zip_safe=False,
