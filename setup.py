@@ -6,13 +6,14 @@
     setuptoolsを使う.コードの通り.
 """
 import os
+import pathlib
 import sys
 from codecs import open
 
 import setuptools
 from setuptools.command.test import test as testCommand
 
-here = os.path.abspath(os.path.dirname(__file__))
+here = pathlib.Path(__file__).parent
 
 
 class PyTest(testCommand):
@@ -44,13 +45,6 @@ class PyTest(testCommand):
 
 
 # 'setup.py publish' shortcut.
-if sys.argv[-1] == 'publish':
-    os.system('rm -rf dist/*')
-    os.system('python setup.py sdist')
-    os.system('twine upload dist/*')
-    sys.exit()
-
-# 'setup.py publish' shortcut.
 if sys.argv[-1] == 'publish_test':
     os.system('rm -rf dist/*')
     os.system('python setup.py sdist')
@@ -67,7 +61,7 @@ test_requirements = [
 ]
 
 about = {}
-with open(os.path.join(here, 'design_db_manager', '__version__.py'), 'r', 'utf-8') as f:
+with (here / 'design_db_manager' / '__version__.py').open() as f:
     exec(f.read(), about)
 
 with open('README.md', 'r', 'utf-8') as f:

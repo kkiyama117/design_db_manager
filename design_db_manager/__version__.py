@@ -8,8 +8,8 @@ __url__ = 'https://github.com/kkiyama117/design_db_manager'
 # 1.2.0       # Final Release
 # 1.2.0.post1 # Post Release
 # 23          # Serial release
-__version__ = '0.1.0a1'
-__build__ = 0x000101
+__version__ = '0.1.1a1'
+__build__ = 0x000111
 __author__ = 'kkiyama117'
 __author_email__ = 'k.kiyama117@gmail.com'
 __maintainer__ = 'kkiyama117'
