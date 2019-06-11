@@ -24,7 +24,8 @@ class PyTest(testCommand):
         ('pytest-args=', 'a', 'Arguments for pytest'),
     ]
 
-    def __init__(self):
+    def __init__(self, dist, **kw):
+        super().__init__(dist, **kw)
         self.test_suite = 'tests'
         self.test_args = []
         self.pytest_args = []
@@ -56,8 +57,6 @@ if sys.argv[-1] == 'publish_test':
     os.system('twine upload --repository pypitest dist/*')
     sys.exit()
 
-packages = ['design_db_manager', 'design_db_manager.adapters']
-
 requires = [
 ]
 
@@ -87,7 +86,7 @@ setuptools.setup(
     maintainer=about['__maintainer__'],
     maintainer_email=about['__maintainer_email__'],
     url=about['__url__'],
-    packages=packages,
+    packages=setuptools.find_packages(),
     package_data={'': ['LICENSE', 'NOTICE']},
     package_dir={'design_db_manager': 'design_db_manager'},
     include_package_data=True,
