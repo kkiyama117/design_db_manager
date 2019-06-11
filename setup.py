@@ -44,22 +44,6 @@ class PyTest(testCommand):
         sys.exit(errno)
 
 
-# 'setup.py publish' shortcut.
-if sys.argv[-1] == 'publish_test':
-    os.system('rm -rf dist/*')
-    os.system('python setup.py sdist')
-    os.system('twine upload --repository pypitest dist/*')
-    sys.exit()
-
-requires = [
-]
-
-test_requirements = [
-    'pytest',
-    'pytest-cov',
-    'tox'
-]
-
 about = {}
 with (here / 'design_db_manager' / '__version__.py').open() as f:
     exec(f.read(), about)
@@ -86,7 +70,9 @@ setuptools.setup(
     include_package_data=True,
     python_requires=">=3.5",
     setup_requires=['setuptools >= 30.3'],
-    install_requires=requires,
+    install_requires=[
+        'mysql-connector-python'
+    ],
     license=about['__license__'],
     zip_safe=False,
     classifiers=[
@@ -100,7 +86,6 @@ setuptools.setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -109,10 +94,14 @@ setuptools.setup(
         'Topic :: Utilities'
     ],
     entry_points={
-        # 'console_scripts': ['design_db_manager= design_db_manager.core:main']
+        'console_scripts': ['design_db_manager= design_db_manager.api:main']
     },
     cmdclass={'test': PyTest},
-    tests_require=test_requirements,
+    tests_require=[
+        'pytest',
+        'pytest-cov',
+        'tox'
+    ],
     extras_require={
         'test': ['pytest', 'tox'],
     },

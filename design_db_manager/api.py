@@ -3,16 +3,16 @@
 
 
 def prepare(factory, method, **kwargs):
-    return "", "", kwargs
+    return factory, method, kwargs
 
 
-def event_parser(factory, method: str, **kwargs):
+def run(factory, method: str, **kwargs):
     """hook to call event list factory
 
     call any function
 
     Args:
-        factory: :obj:`kueventparser.events.EventManager` or :obj:`str`
+        factory: :obj:`design_db_manager.events.EventManager` or :obj:`str`
         method (str): 取得の仕方. 'get' or 'get_all'
         kwargs (dict): kwargs for method selected by args
             date or (year and month) ... get_all method
