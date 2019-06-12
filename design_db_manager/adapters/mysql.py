@@ -1,5 +1,5 @@
 from itertools import chain
-from typing import Optional, List
+from typing import Optional
 
 import pymysql.cursors
 
@@ -14,18 +14,31 @@ class MySQLManager:
         self.password = password
         self.charset = charset
 
-    def _connector(self, **kwargs):
+    def _connector(self, is_dict: bool = True, **kwargs):
+        if is_dict:
+            cursor_class = pymysql.cursors.DictCursor
+        else:
+            cursor_class = pymysql.cursors.Cursor
         return pymysql.connect(host=self.host,
                                port=self.port,
                                user=self.user,
                                password=self.password,
                                db=self.db,
                                charset=self.charset,
-                               # cursorclass=pymysql.cursors.DictCursor,
+                               cursorclass=cursor_class,
                                **kwargs
                                )
 
-    def get_tables(self) -> iter:
+    def execute(self, query: str, args=None, is_dict=True):
+        conn = self._connector(is_dict)
+        try:
+            with conn as cursor:
+                cursor.execute(query, args)
+                return cursor.fetchall()
+        finally:
+            conn.close()
+
+    def table_names(self) -> iter:
         """
 
         Returns:
@@ -34,16 +47,26 @@ class MySQLManager:
         """
         # Query to get employees who joined in a period defined by two dates
         query = "show tables"
-        conn = self._connector()
-        try:
-            with conn as cursor:
-                cursor.execute(query)
-                tables_data = cursor.fetchall()
-                return chain.from_iterable(tables_data)
-        finally:
-            conn.close()
+        tables_data = self.execute(query, is_dict=False)
+        return chain.from_iterable(tables_data)
+
+    def field_data(self, table_name: str):
+        """
+
+        Returns:
+            iter: iterable of table:data
+
+        """
+        query = "show full columns from {}".format(table_name)
+        # query = "show full columns from product"
+        tables_data = self.execute(query)
+        return tables_data
 
 
 if __name__ == '__main__':
-    print(list(MySQLManager("test_db", user="kiyama", password="19980117").get_tables()))
-    # print(MySQLManager("test_db", user="kiyama", password="19980117").get_tables())
+    mm = MySQLManager("test_db", user="kiyama", password="19980117")
+    x: str
+    for x in mm.table_names():
+        print(x)
+        y = mm.field_data(x)
+        print(y)
