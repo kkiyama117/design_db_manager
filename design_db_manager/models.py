@@ -44,6 +44,11 @@ class ColumnType:
     def __eq__(self, other):
         return (self.type_name is other.type_name) and (self.limit is other.limit)
 
+    def __str__(self):
+        if self.limit < 1:
+            return self.type_name
+        return "{}({})".format(self.type_name, self.limit)
+
 
 class ColumnExtra(Enum):
     AUTO_INCREMENT = 1

@@ -4,8 +4,7 @@ from adapters.mysql import MySQLManager
 from models import DB, ColumnType, Column
 
 
-def run():
-    db = DB("test_db", config={"user": "kiyama", "password": "19980117"})
+def run(db: DB):
     mm = MySQLManager(db.name, **db.config)
     for table_name in mm.table_names():
         print(table_name)
@@ -27,13 +26,17 @@ def column_factory(column_data: dict):
     extra = column_data['Extra']
     privileges = column_data['Privileges']
     comment = column_data['Comment']
-    a = re.match(r'((.+)?\(([0-9]+)\))', value_type_str)
-    b = a.group(2)
-    c = a.group(3)
-    value_type = ColumnType(b, int(c))
+    if '(' in value_type_str:
+        a = re.match(r'((.+)?\(([0-9]+)\))', value_type_str)
+        b = a.group(2)
+        c = a.group(3)
+        value_type = ColumnType(b, int(c))
+    else:
+        value_type = ColumnType(value_type_str)
     return Column(name=name, value_type=value_type, collation=collation, can_null=can_null, is_primary=is_primary,
                   default=default, privileges=privileges, extra=extra, comment=comment)
 
 
 if __name__ == '__main__':
-    run()
+    db = DB("test_db", config={"user": "kiyama", "password": "19980117"})
+    run(db)
