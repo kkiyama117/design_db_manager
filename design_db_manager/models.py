@@ -6,9 +6,13 @@ from typing import List, Optional
 
 
 class DB:
-    def __init__(self):
-        self.tables: List[Table] = []
-        self.type = None
+    def __init__(self, name: str, kind="MySQL", config: dict = None, tables=None):
+        if tables is None:
+            tables = []
+        self.name = name
+        self.tables: List[Table] = tables
+        self.kind = kind
+        self.config = config
 
 
 class Table:
@@ -18,13 +22,16 @@ class Table:
 
 
 class Column:
-    def __init__(self):
-        self.name: str = ""
-        self.type: Optional[ColumnType] = None
-        self.is_null: bool = False
-        self.is_primary: bool = False
-        self.default: Optional[str] = None
-        self.extra: List[ColumnExtra] = []
+    def __init__(self, name, value_type, collation, can_null, is_primary, default, extra, privileges, comment):
+        self.name: str = name
+        self.value_type: Optional[ColumnType] = value_type
+        self.collation = collation
+        self.can_null: bool = can_null
+        self.is_primary: bool = is_primary
+        self.default: Optional[str] = default
+        self.privileges = privileges
+        self.extra: List[ColumnExtra] = extra
+        self.comment = comment
 
 
 # Abstract class

@@ -50,7 +50,7 @@ class MySQLManager:
         tables_data = self.execute(query, is_dict=False)
         return chain.from_iterable(tables_data)
 
-    def field_data(self, table_name: str):
+    def column_data(self, table_name: str):
         """
 
         Returns:
@@ -68,5 +68,5 @@ if __name__ == '__main__':
     x: str
     for x in mm.table_names():
         print(x)
-        y = mm.field_data(x)
+        y = mm.column_data(x)
         print(y)
