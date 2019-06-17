@@ -52,3 +52,4 @@ class ColumnType:
 
 class ColumnExtra(Enum):
     AUTO_INCREMENT = 1
+    ID = 2
